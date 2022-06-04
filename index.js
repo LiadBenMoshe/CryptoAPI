@@ -4,7 +4,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const app = express();
 
-const numberOfPage = 6;
+const numberOfPage = 134;
 const crypto = [];
 const costs = [];
 const allData = [];
