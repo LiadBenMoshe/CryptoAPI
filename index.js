@@ -9,6 +9,7 @@ const crypto = [];
 const costs = [];
 const allData = [];
 
+//heroku config:set NODE_OPTIONS="--max_old_space_size=2560" -a [app_name]
 //a.d-lg-none.font-bold.tw-w-12
 let count = 0;
 for (let i = 1; i < numberOfPage; i++) {
@@ -22,7 +23,7 @@ for (let i = 1; i < numberOfPage; i++) {
         let url = $(element).attr("href");
         crypto.push({
           cryptoName,
-          url: `https://www.coingecko.com${url}`,
+          url,
         });
       });
 
@@ -83,7 +84,7 @@ app.get("/coins/:coinname", async function (req, res) {
     let coin = allData.find((coin) => coin.cryptoName === coinname);
     let coinData = {};
     await axios
-      .get(coin.url)
+      .get(`https://www.coingecko.com${coin.url}`)
       .then(function (response) {
         const html = response.data;
         const $ = cheerio.load(html);
