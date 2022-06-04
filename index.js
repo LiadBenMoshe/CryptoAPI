@@ -4,7 +4,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const app = express();
 
-const numberOfPage = 134;
+const numberOfPage = 134; // 134 pages
 const crypto = [];
 const costs = [];
 const allData = [];
@@ -50,7 +50,7 @@ for (let i = 1; i < numberOfPage; i++) {
 }
 
 app.get("/", function (req, res) {
-  res.json("Welcome to Crypto Scraper");
+  res.json("Welcome to Crypto Coins API");
 });
 
 app.get("/coins", function (req, res) {
