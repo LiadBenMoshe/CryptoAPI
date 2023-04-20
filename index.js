@@ -4,7 +4,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const app = express();
 
-const numberOfPage = 134; // 134 pages
+const numberOfPage = 10; // 10 pages
 const crypto = [];
 const costs = [];
 const allData = [];
@@ -14,24 +14,29 @@ const allData = [];
 let count = 0;
 for (let i = 1; i < numberOfPage; i++) {
   axios
-    .get(`https://www.coingecko.com/?page=${i}`)
+    .get(`https://crypto.com/price?page=${i}`)
     .then(function (response) {
       const html = response.data;
       let $ = cheerio.load(html);
-      $("a.d-lg-none.font-bold.tw-w-12").each(function (i, element) {
-        let cryptoName = $(element).text();
-        let url = $(element).attr("href");
+
+      
+      $("tbody tr td a p").each(function (i, element) {
+        let cryptoName = $(element).next().text();
+        let url = $(element).parent().parent().parent().attr('href');
+        //console.log(cryptoName)
+        // console.log(url)
         crypto.push({
           cryptoName,
           url,
         });
       });
 
-      $("td.td-price.price.text-right.pl-0 .no-wrap").each(function (
+      $(".css-b1ilzc ").each(function (
         i,
         element
       ) {
         let cost = $(element).text();
+        //console.log(cost);
         costs.push({
           cost,
         });
@@ -44,11 +49,13 @@ for (let i = 1; i < numberOfPage; i++) {
           cost: costs[count].cost,
         });
       }
-    })
+     //console.log(allData)
+     })
     .catch((err) => {
       console.log("err: " + err);
     });
 }
+
 
 app.get("/", function (req, res) {
   res.json("Welcome to Crypto Coins API");
@@ -84,13 +91,14 @@ app.get("/coins/:coinname", async function (req, res) {
     let coin = allData.find((coin) => coin.cryptoName === coinname);
     let coinData = {};
     await axios
-      .get(`https://www.coingecko.com${coin.url}`)
+      .get(`https://crypto.com${coin.url}`)
       .then(function (response) {
         const html = response.data;
         const $ = cheerio.load(html);
         let coinExtraData = [];
-        $("table.table.b-b .tw-text-gray-900").each(function (i, element) {
+        $(".chakra-stat dl dd").each(function (i, element) {
           let extraData = $(element).text();
+          console.log(extraData);
           coinExtraData.push({
             extraData,
           });
@@ -98,11 +106,10 @@ app.get("/coins/:coinname", async function (req, res) {
         coinData.cryptoName = coin.cryptoName;
         coinData.cost = coin.cost;
         coinData.url = coin.url;
+        coinData.numberOfCoins = coinExtraData[0].extraData.trim();
         coinData.marketCap = coinExtraData[1].extraData.trim();
-        coinData.marketCapDominance = coinExtraData[2].extraData.trim();
-        coinData.tradingVolume = coinExtraData[3].extraData.trim();
-        coinData.volumeDividedMarketCap = coinExtraData[4].extraData.trim();
-        coinData.Low24DividedHigh24 = coinExtraData[5].extraData.trim();
+        coinData.volume24 = coinExtraData[3].extraData.trim();
+        coinData.ethGas = coinExtraData[5].extraData.trim();
       })
       .catch((err) => {
         console.log("err: " + err);
