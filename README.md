@@ -1,10 +1,10 @@
 # CryptoAPI
-## https://crypto-coin-app.herokuapp.com/
+## https://crypto-api-6b9x.onrender.com/
 ####
 How to use:
 ####
-https://crypto-coin-app.herokuapp.com/coins bring you all the crypto coins that have and their prices.
+https://crypto-api-6b9x.onrender.com/coins bring you all the crypto coins that have and their prices.
 ####
-https://crypto-coin-app.herokuapp.com/coins/{coin-symbol} give you the coin information.
+https://crypto-api-6b9x.onrender.com/coins/{coin-symbol} give you the coin information.
 ####
-example: (https://crypto-coin-app.herokuapp.com/coins/btc) 
+example: (https://crypto-api-6b9x.onrender.com/coins/btc) 
